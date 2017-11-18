@@ -52,10 +52,10 @@ void checkID(boolean standAlone)
     }
 
     if(!standAlone){
-      String msgStr = String(deviceName) + ";" + String(newTag);
+      String msgStr = String(DEVICE_NAME) + ";" + String(newTag);
       char msg[20];
       msgStr.toCharArray(msg, 20);
-      pubSubClient.publish(pubTopic, msg);
+      pubSubClient.publish(PUB_TOPIC, msg);
     }
     lastTag = newTag;
     timeNow = millis();

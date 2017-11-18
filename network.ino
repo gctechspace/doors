@@ -35,7 +35,7 @@ void connectMQTT()
 {
   showColour(YELLOW);
   // Continually attemps to connect to the MQTT Broker
-  while (!pubSubClient.connect(deviceName)) { //, username, password)) { 
+  while (!pubSubClient.connect(DEVICE_NAME)) { //, username, password)) { 
     delay(1);
     if(DEBUG) {
       static byte cnt = 0;
@@ -47,7 +47,7 @@ void connectMQTT()
 
   // Publishes an Alive message of the device name and IP address
   IPAddress myIP = WiFi.localIP();
-  String aliveMsgStr = String(deviceName) + "-" + String(myIP[0]) + "." + String(myIP[1]) + "." + String(myIP[2]) + "." + String(myIP[3]);
+  String aliveMsgStr = String(DEVICE_NAME) + "-" + String(myIP[0]) + "." + String(myIP[1]) + "." + String(myIP[2]) + "." + String(myIP[3]);
   char aliveMsg[30];
   aliveMsgStr.toCharArray(aliveMsg, 30);
   pubSubClient.publish("alive", aliveMsg);
@@ -63,7 +63,7 @@ void OTAinit()
   // Port defaults to 8266
   // ArduinoOTA.setPort(8266);
   
-  ArduinoOTA.setHostname(deviceName);
+  ArduinoOTA.setHostname(DEVICE_NAME);
 
   // No authentication by default
   //ArduinoOTA.setPassword(OTApassword);  //(const char *)

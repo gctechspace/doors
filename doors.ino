@@ -53,7 +53,7 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 MFRC522 mfrc522(NFC_SS_PIN, NFC_RST_PIN); // Create MFRC522 instance
 
 WiFiClient wifiClient;
-PubSubClient pubSubClient(server, port, msgRecieved, wifiClient);
+PubSubClient pubSubClient(SERVER, PORT, msgRecieved, wifiClient);
 
 
 
@@ -68,13 +68,13 @@ void setup()
   } else {
     pixels.begin();        // Init NeoPixel library.
   }
-  sprintf(subTopic,"%s%s%s",pubTopic,"/",deviceName);
+  sprintf(SUB_TOPIC,"%s%s%s",PUB_TOPIC,"/",DEVICE_NAME);
   pinMode(STRIKE, OUTPUT);
 
   showColour(LBLUE);
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, pass);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   connectWifi();
 
   OTAinit();
