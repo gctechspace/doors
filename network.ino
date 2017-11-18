@@ -1,3 +1,5 @@
+#include <ArduinoOTA.h>
+
 void msgRecieved(char* topic, byte* payload, unsigned int length) {
   if (DEBUG){
     for (int i = 0; i < length; i++) {

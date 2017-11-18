@@ -10,16 +10,15 @@
  
 #define DEBUG 0
 
-#include "credentials.h"
-#include "magicNumbers.h"
-#include <PubSubClient.h>
-#include <Adafruit_NeoPixel.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
+#include <PubSubClient.h>
 #include <ArduinoOTA.h>
+#include <Adafruit_NeoPixel.h>
 #include <SPI.h>
 #include <MFRC522.h>
+
+#include "credentials.h"
+#include "magicNumbers.h"
 
 unsigned long resetAttempt = 300000; // 5mins
 boolean doorOpen = false;
@@ -53,7 +52,7 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, NEOPIN, NEO_GRB + NEO_KH
 MFRC522 mfrc522(NFC_SS_PIN, NFC_RST_PIN); // Create MFRC522 instance
 
 WiFiClient wifiClient;
-PubSubClient pubSubClient(SERVER, PORT, msgRecieved, wifiClient);
+PubSubClient pubSubClient(MQTT_SERVER, MQTT_PORT, msgRecieved, wifiClient);
 
 
 

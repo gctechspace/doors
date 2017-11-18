@@ -1,3 +1,6 @@
+#ifndef MAGIC_NUMBERS_H
+#define MAGIC_NUMBERS_H
+
 //**** Pins ****
 
 //Version 1
@@ -41,3 +44,5 @@
 #define EXPIRED_KEY    2
 #define EXPIRING_KEY   3
 #define VALID_KEY      4
+
+#endif
