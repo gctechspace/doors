@@ -24,7 +24,6 @@ unsigned long resetAttempt = 300000; // 5mins
 boolean doorOpen = false;
 long openTime = 0;
 int duration = 4000;   //This should be set upon startup
-char subTopic[80];   //The Subscribe topis is made up of pubTopic + deviceID
 
 union tagID {
    unsigned long value;

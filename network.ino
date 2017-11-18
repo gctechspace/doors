@@ -37,7 +37,7 @@ void connectMQTT()
 {
   showColour(YELLOW);
   // Continually attemps to connect to the MQTT Broker
-  while (!pubSubClient.connect(DEVICE_NAME)) { //, username, password)) { 
+  while (!pubSubClient.connect(DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD)) { 
     delay(1);
     if(DEBUG) {
       static byte cnt = 0;
@@ -55,7 +55,7 @@ void connectMQTT()
   pubSubClient.publish("alive", aliveMsg);
 
   // Subscribes to a topic 
-  pubSubClient.subscribe(subTopic);  
+  pubSubClient.subscribe(SUB_TOPIC);  
 }
 
 
