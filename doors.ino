@@ -53,15 +53,18 @@ MFRC522 mfrc522(NFC_SS_PIN, NFC_RST_PIN); // Create MFRC522 instance
 WiFiClient wifiClient;
 PubSubClient pubSubClient(MQTT_SERVER, MQTT_PORT, msgRecieved, wifiClient);
 
-volatile boolean doorStateChange = 1;
+volatile boolean doorStatePrevious = 0; // 0=closed, 1=open // todo: move to magic numbers.
+volatile boolean doorStateCurrent = 0; // 0=closed, 1=open // todo: move to magic numbers.
+volatile boolean doorStateChange = 0; 
 volatile unsigned long intTime = 0;
 #define INT_DEBOUNCE 100
 
 void handleDoorStateChangeISR()
 {
+  doorStateCurrent = digitalRead(HALL_EFFECT_PIN) ? 1 : 0;  // 0=closed, 1=open // todo: move to magic numbers.
   unsigned long timeNow = millis();
-  if(timeNow - intTime > INT_DEBOUNCE){
-    doorStateChange = 1;
+  if(doorStateCurrent != doorStatePrevious || timeNow - intTime > INT_DEBOUNCE){
+    doorStateChange = 1; // Tell our main loop that the door state change needs to be sent via MQTT
     intTime = timeNow;
   }
 }
