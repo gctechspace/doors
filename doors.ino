@@ -127,11 +127,12 @@ void loop()
   if(doorStateChange){
     doorStateChange = 0;
     String doorMsgStr;
-    if(digitalRead(HALL_EFFECT_PIN)){
+    if(doorStateCurrent){
       doorMsgStr = String(DEVICE_NAME) + ";open";
     } else {
       doorMsgStr = String(DEVICE_NAME) + ";closed";
     }
+    doorStatePrevious = doorStateCurrent;
     char msg[20];
     doorMsgStr.toCharArray(msg, 20);
     pubSubClient.publish("techspace/doors", msg);
