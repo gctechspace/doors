@@ -53,7 +53,18 @@ MFRC522 mfrc522(NFC_SS_PIN, NFC_RST_PIN); // Create MFRC522 instance
 WiFiClient wifiClient;
 PubSubClient pubSubClient(MQTT_SERVER, MQTT_PORT, msgRecieved, wifiClient);
 
+volatile boolean doorStateChange = 1;
+volatile unsigned long intTime = 0;
+#define INT_DEBOUNCE 100
 
+void handleDoorStateChangeISR()
+{
+  unsigned long timeNow = millis();
+  if(timeNow - intTime > INT_DEBOUNCE){
+    doorStateChange = 1;
+    intTime = timeNow;
+  }
+}
 
 void setup() 
 {
@@ -68,6 +79,9 @@ void setup()
   }
   sprintf(SUB_TOPIC,"%s%s%s",PUB_TOPIC,"/",DEVICE_NAME);
   pinMode(STRIKE, OUTPUT);
+  pinMode(HALL_EFFECT_PIN, INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(HALL_EFFECT_PIN), handleDoorStateChangeISR, CHANGE);
 
   showColour(LBLUE);
 
@@ -107,6 +121,18 @@ void loop()
     }
   } 
 
+  if(doorStateChange){
+    doorStateChange = 0;
+    String doorMsgStr;
+    if(digitalRead(HALL_EFFECT_PIN)){
+      doorMsgStr = String(DEVICE_NAME) + ";open";
+    } else {
+      doorMsgStr = String(DEVICE_NAME) + ";closed";
+    }
+    char msg[20];
+    doorMsgStr.toCharArray(msg, 20);
+    pubSubClient.publish("techspace/doors", msg);
+  }
 
   houseKeeping();
 }
@@ -125,8 +151,8 @@ void houseKeeping()
     connectMQTT();
   } 
   
-  pubSubClient.loop(); 
-  ArduinoOTA.handle();  
+  pubSubClient.loop();
+  ArduinoOTA.handle();
 }
 
 void openDoor() {
